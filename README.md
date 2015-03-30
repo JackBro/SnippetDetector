@@ -81,7 +81,6 @@ Snippet description: DWORD Crypt::crc32Hash(const void *data, DWORD size)
 Snippet name: Process__getUserByProcessHandle
 Snippet description: TOKEN_USER *Process::_getUserByProcessHandle(HANDLE process, LPDWORD sessionId)
 
-
 [SNIPPET DETECTOR] Semantic match at 0x41CAAE
 Snippet name: WinSecurity__getUserByToken
 Snippet description: TOKEN_USER *WinSecurity::_getUserByToken(HANDLE token)
