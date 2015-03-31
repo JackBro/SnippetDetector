@@ -38,7 +38,7 @@ The pack contains eight files, but only some of them are directly executed as an
    - snippet description: taken from the comment (if there's one) of the function
    - syntactic bytes sequence
    - semantic bytes sequence
-   - snippet comments: all the instructions comment
+   - snippet comments: all the comments of the instructions
 - SD_DeleteSnippet.py: delete a snippet from the local or global database
 - SD_UpdateSnippet.py: update information of an already saved snippet. It's possible to update the name/description/comments
 - SD_IdentifyOneSnippet.py: try to identify one snippet only
