@@ -99,7 +99,7 @@ Snippet description: bool Fs::_pathCombine(LPWSTR dest, const LPWSTR dir, const 
 
 [SNIPPET DETECTOR] 0 syntactic snippet, 7 semantic snippet and 0 multiple matches has been found
 ```
-SD is able to semantically identify 7 of 10 functions (it's quite hard to find a syntactic match, you should know why...), and you can now start checking the file with a little initial help. I have also added a 'multiple matches' voice in case there's a semantic corrispondence with more than one saved snippet. In this case you can decide what's the best snippet to apply, just use SD_IdentifyOneSnippet.py script.
+SD is able to semantically identify 7 of 10 functions (it's quite hard to find a syntactic match, you should know why...), and you can now start checking the file with a little initial help. I have also added a 'multiple matches' voice in case there's a semantic corrispondence with more than one saved snippet. In this case you can decide what's the best snippet to apply running SD_IdentifyOneSnippet.py script.
 
 ###In the end
 Snippet Detector is in early beta version, I'm planning to add some more features in the future. Feel free to report bugs/comments/criticisms directly to my mail address.
