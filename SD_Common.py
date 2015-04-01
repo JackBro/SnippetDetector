@@ -88,7 +88,13 @@ class sd_common:
         # parse all the instructions
         for instr in idautils.Heads(_start, _end):
             if idc.GetFlags(instr) & idc.FF_COMM:
-                # add the current instruction comment
-                comments += struct.pack('>I', len(idc.Comment(instr))) + struct.pack(">I", instr - _start) + idc.Comment(instr)
+                # is it a repeatable comment?
+                tmp_comment = idc.Comment(instr)
+                if tmp_comment is not None:
+                    # add the current regular comment
+                    comments += struct.pack('>I', len(tmp_comment)) + struct.pack(">I", instr - _start) + tmp_comment
+                else:
+                    # add the current repeatable comment
+                    comments += struct.pack('>I', len(idc.RptCmt(instr))) + struct.pack(">I", instr - _start) + idc.RptCmt(instr)
         return comments
 
