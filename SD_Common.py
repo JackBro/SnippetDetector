@@ -19,7 +19,6 @@
 """
 
 import struct
-
 import idc
 import idautils
 
