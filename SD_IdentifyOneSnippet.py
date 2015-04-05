@@ -23,7 +23,7 @@ from SD_db import sd_db
 from SD_Semantic import semantic
 from SD_Common import sd_common
 
-db_answer = AskYN(1, 'Do you want to search inside local database?')
+db_answer = AskYN(1, 'Do you want to search inside local database?\n[YES = local, NO = global, CANCEL = abort]')
 if db_answer == -1:
     print('\n[SNIPPET DETECTOR] Search snippet operation aborted...')
 else:
