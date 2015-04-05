@@ -23,7 +23,7 @@
 from SD_db import sd_db
 
 # ask for the local/global database
-db_answer = AskYN(1, 'Do you want to delete the snippet from the local database?')
+db_answer = AskYN(1, 'Do you want to delete the snippet from the local database?\n[YES = local, NO = global, CANCEL = abort]')
 if db_answer == -1:
     print('[SNIPPET DETECTOR] Delete snippet operation aborted.')
 else:
