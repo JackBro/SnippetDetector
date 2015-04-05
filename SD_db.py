@@ -41,7 +41,7 @@ class sd_db:
     """
     def get_db_folder(self, _local, _create):
         if _local == 1:         # local db
-            _folder = os.path.dirname(idc.GetInputFilePath()) + os.sep + 'SD_local_DB'
+            _folder = os.path.dirname(idc.GetIdbPath()) + os.sep + 'SD_local_DB'
         else:                   # global db
             _folder = os.path.dirname(os.path.realpath(__file__)) + os.sep + "SnippetDetector_DB"
 
