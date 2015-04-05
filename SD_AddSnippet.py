@@ -30,7 +30,7 @@ from SD_Common import sd_common
 db_type = ['global', 'local']
 
 # ask for local/global database
-db_answer = AskYN(1, 'Do you want to save the snippet inside the local database?')
+db_answer = AskYN(1, 'Do you want to save the snippet inside the local database?\n[YES = local, NO = global, CANCEL = abort]')
 if db_answer == -1:
     print('\n[SNIPPET DETECTOR] Add snippet operation aborted')
 else:
