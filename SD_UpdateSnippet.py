@@ -22,7 +22,7 @@
 
 from SD_db import sd_db
 from SD_Semantic import semantic
-
+from SD_Common import sd_common
 
 # ask for the local/global database
 db_answer = AskYN(1, 'Do you want to update the snippet from the local database?\n[YES = local, NO = global, CANCEL = abort]')
