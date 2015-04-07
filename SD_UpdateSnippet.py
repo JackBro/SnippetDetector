@@ -65,4 +65,6 @@ else:
                 print('\n[SNIPPET DETECTOR] Snippet not updated')
         else:
             print('\n[SNIPPET DETECTOR] Unable to get number of instruction inside function at 0x%X...' % func_start)
+    else:
+        print('\n[SNIPPET DETECTOR] Wrong snippet address: 0x%x' % ScreenEA())
 
