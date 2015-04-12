@@ -78,7 +78,7 @@ else:
                         fail = True
                         print('[SNIPPET DETECTOR] Snippet is already inside the database (semantic match):')
             else:
-                print('\n[SNIPPET DETECTOR] Unable to convert syntactical snippet into semantic one...')
+                print('\n[SNIPPET DETECTOR] Unable to convert syntactical snippet into semantic one inside function at 0x%x' % func_start)
         if fail:
             # print the information about the snippet inside the database
             print('Snippet name: %s' % _snippet[0])
