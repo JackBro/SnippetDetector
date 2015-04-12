@@ -90,10 +90,13 @@ class semantic:
                 # avoid special instructions like "int 3", "shr eax, 1", ...
                 if ((idc.Byte(instr) == 0xCC) and (idc.ItemSize(instr) == 1)):
                     _sem += chr(idc.Byte(instr))
-                elif (((idc.Byte(instr) == 0xD0) or (idc.Byte(instr) == 0xD1)) and (idc.ItemSize(instr) > 1)):
+                elif (((idc.Byte(instr) == 0xD0) or (idc.Byte(instr) == 0xD1)) and (idc.ItemSize(instr) == 2)):
                     _sem += chr(idc.Byte(instr))
                     _sem += chr(idc.Byte(instr + 1))
-                   _sem += chr(idc.Byte(instr + 1))
+                elif (((idc.Byte(instr) == 0xD0) or (idc.Byte(instr) == 0xD1)) and (idc.ItemSize(instr) == 3)):
+                    _sem += chr(idc.Byte(instr))
+                    _sem += chr(idc.Byte(instr + 1))
+                    _sem += chr(idc.Byte(instr + 2))
                 elif ((idc.Byte(instr) == 0x66) and ((idc.Byte(instr + 1) == 0xD0) or (idc.Byte(instr + 1) == 0xD1)) and (idc.ItemSize(instr) == 3)):
                     _sem += chr(idc.Byte(instr))
                     _sem += chr(idc.Byte(instr + 1))
