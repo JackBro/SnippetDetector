@@ -39,24 +39,6 @@ class semantic:
                     n_op += 1
         return n_op
 
-    """
-        get_operand_value_len_in_bytes      return the length in bytes of an operand.
-    """
-    def get_operand_value_len_in_bytes(self, _info, op_offset, val):
-        if _info.size - op_offset > 7:
-            if idc.Qword(_info.ea + op_offset) == val:
-                return 8
-        if _info.size - op_offset > 3:
-            if idc.Dword(_info.ea + op_offset) == val:
-                return 4
-        if _info.size - op_offset > 1:
-            if idc.Word(_info.ea + op_offset) == (val & 0x0000FFFF):
-                return 2
-        if _info.size - op_offset > 0:
-            if idc.Byte(_info.ea + op_offset) == (val & 0x000000FF):
-                return 1
-        return 0
-
 
     """
         get_semantic_bytes       conversion is done removing all the operands from every single instruction.
@@ -69,20 +51,19 @@ class semantic:
                 op_offset = _info.Operands[i].offb
                 if op_offset == 0:
                     return None
-                # check the operand type
-                t = _info.Operands[i].type
-                if (t == idc.o_imm) or (t == idc.o_mem) or (t == idc.o_displ):
-                    op_len = self.get_operand_value_len_in_bytes(_info, op_offset, idc.GetOperandValue(_info.ea, i))
-                    if op_len == 0:
-                        return None
-                elif t == idc.o_near:
-                    val = idc.GetOperandValue(_info.ea, i)
-                    if int(val) > int(_info.ea):
-                        op_len = self.get_operand_value_len_in_bytes(_info, op_offset, val - _info.ea - _info.size)
-                    else:
-                        op_len = self.get_operand_value_len_in_bytes(_info, op_offset, (0x100000000 + val) - _info.ea - _info.size)
-                    if op_len == 0:
-                        return None
+                op_type = _info.Operands[i].dtyp
+                if op_type == 0:    # dt_byte
+                    op_len = 1
+                elif op_type == 1:  # idc.dt_word:
+                    op_len = 2
+                elif op_type == 2:  # idc.dt_dword:
+                    op_len = 4
+                elif op_type == 3:  # idc.dt_float:
+                    op_len = 4
+                elif op_type == 4:  # idc.dt_double:
+                    op_len = 8
+                elif op_type == 7:  # idc.dt_qword:
+                    op_len = 8
                 else:
                     return None
                 # set the byte index to remove from the original bytes sequence
