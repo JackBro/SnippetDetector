@@ -30,7 +30,7 @@ class semantic:
 
     """
         get_first_numerical_operand_offset      get the offset of the first numerical operand. Numerical stands for
-                                                o_mem, o_phrase, o_displ, o_imm, o_far or o_near
+                                                o_mem, o_displ, o_imm, o_far or o_near
     """
     def get_first_numerical_operand_offset(selfself, _info):
         _offset = 0
