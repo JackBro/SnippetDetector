@@ -29,52 +29,26 @@ class semantic:
         pass
 
     """
-        get_numerical_operands_number    return the number of numerical operands of the instruction.
+        get_first_numerical_operand_offset      get the offset of the first numerical operand. Numerical stands for
+                                                o_mem, o_phrase, o_displ, o_imm, o_far or o_near
     """
-    def get_numerical_operands_number(self, _info):
-        n_op = 0
+    def get_first_numerical_operand_offset(selfself, _info):
+        _offset = 0
         for i in range(0, 6):
             if _info.Operands[i]:
                 if idc.GetOpType(_info.ea, i) in valid_types:
-                    n_op += 1
-        return n_op
+                    _offset = _info.Operands[i].offb
+                    return _offset
+        return _offset
 
 
     """
-        get_semantic_bytes       conversion is done removing all the operands from every single instruction.
+        get_semantic_bytes       conversion is done removing all the bytes after the first operand offset
     """
-    def get_semantic_bytes(self, _info):
-        toremove = []
-        # Check the instruction operands
-        for i in range(0, 6):
-            if _info.Operands[i].type in valid_types:
-                op_offset = _info.Operands[i].offb
-                if op_offset == 0:
-                    return None
-                op_type = _info.Operands[i].dtyp
-                if op_type == 0:    # dt_byte
-                    op_len = 1
-                elif op_type == 1:  # idc.dt_word:
-                    op_len = 2
-                elif op_type == 2:  # idc.dt_dword:
-                    op_len = 4
-                elif op_type == 3:  # idc.dt_float:
-                    op_len = 4
-                elif op_type == 4:  # idc.dt_double:
-                    op_len = 8
-                elif op_type == 7:  # idc.dt_qword:
-                    op_len = 8
-                else:
-                    return None
-                # set the byte index to remove from the original bytes sequence
-                for j in range(op_offset, op_offset + op_len):
-                    toremove.append(j)
-
-        # Seems like everything is ok, mnemonic bytes sequence creation
+    def get_semantic_bytes(self, _addr, _first_offset):
         _semantic_instr = ''
-        for i in range(_info.size):
-            if i not in toremove:
-                _semantic_instr += chr(idc.Byte(_info.ea + i))
+        for i in range(_first_offset):
+            _semantic_instr += chr(idc.Byte(_addr + i))
         return _semantic_instr
 
 
@@ -87,33 +61,16 @@ class semantic:
         for instr in idautils.Heads(_start, _end):
             flags = idc.GetFlags(instr)
             if idc.isCode(flags):         # Code: convert instruction
-                # avoid special instructions like "int 3", "shr eax, 1", ...
-                if ((idc.Byte(instr) == 0xCC) and (idc.ItemSize(instr) == 1)):
-                    _sem += chr(idc.Byte(instr))
-                elif (((idc.Byte(instr) == 0xD0) or (idc.Byte(instr) == 0xD1)) and (idc.ItemSize(instr) == 2)):
-                    _sem += chr(idc.Byte(instr))
-                    _sem += chr(idc.Byte(instr + 1))
-                elif (((idc.Byte(instr) == 0xD0) or (idc.Byte(instr) == 0xD1)) and (idc.ItemSize(instr) == 3)):
-                    _sem += chr(idc.Byte(instr))
-                    _sem += chr(idc.Byte(instr + 1))
-                    _sem += chr(idc.Byte(instr + 2))
-                elif ((idc.Byte(instr) == 0x66) and ((idc.Byte(instr + 1) == 0xD0) or (idc.Byte(instr + 1) == 0xD1)) and (idc.ItemSize(instr) == 3)):
-                    _sem += chr(idc.Byte(instr))
-                    _sem += chr(idc.Byte(instr + 1))
-                    _sem += chr(idc.Byte(instr + 2))					
-                else:
-					# non special instruction
-                    info = idautils.DecodeInstruction(instr)
-                    if self.get_numerical_operands_number(info) != 0:
-                        tmp = self.get_semantic_bytes(info)
-                        if tmp is not None:
-                            _sem += ''.join(tmp)
-                        else:
-                            return None
+                info = idautils.DecodeInstruction(instr)
+                first_offset = self.get_first_numerical_operand_offset(info)
+                if first_offset != 0:
+                    tmp = self.get_semantic_bytes(info.ea, first_offset)
+                    if tmp is not None:
+                        _sem += ''.join(tmp)
                     else:
-                        _sem += ''.join(chr(idc.Byte(info.ea + i)) for i in range(info.size))
+                        return None
+                else:
+                    _sem += ''.join(chr(idc.Byte(info.ea + i)) for i in range(info.size))
             elif idc.isAlign(flags):      # align: copy the byte without semantic conversion
                 _sem += idc.GetManyBytes(instr, idc.NextHead(instr) - instr, False)
         return _sem
-
-
