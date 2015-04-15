@@ -81,7 +81,8 @@ else:
                     apply = sd_c.apply_snippet_to_disasm(func_start, _snippet)
                     if apply:
                         print('Snippet name: %s' % _snippet[0])
-                        print('Snippet description: %s' % _snippet[1])
+                        if _snippet[1]:
+                            print('Snippet description: %s' % _snippet[1])
                     else:
                         print('Database snippet not applied...')
 
